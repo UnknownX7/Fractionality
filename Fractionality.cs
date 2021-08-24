@@ -1,26 +1,23 @@
 using System;
-using System.Reflection;
+using Dalamud.Game;
+using Dalamud.Game.Gui;
 using Dalamud.Plugin;
-
-[assembly: AssemblyTitle("Fractionality")]
-[assembly: AssemblyVersion("1.0.0.0")]
 
 namespace Fractionality
 {
     public class Fractionality : IDalamudPlugin
     {
         public string Name => "Fractionality";
-        public static DalamudPluginInterface Interface { get; private set; }
 
-        public void Initialize(DalamudPluginInterface p)
+        public Fractionality(ChatGui chatGui, SigScanner sigScanner)
         {
-            Interface = p;
+            _ = new DalamudApi() + sigScanner + chatGui;
 
             try
             {
-                var ptr1000f = Interface.TargetModuleScanner.GetStaticAddressFromSig("4C 8D 25 ?? ?? ?? ?? 4C 63 F1");
-                var waitSyntax = Interface.TargetModuleScanner.ScanModule("F3 0F 58 05 ?? ?? ?? ?? F3 48 0F 2C C0 69 C8");
-                var waitCommand = Interface.TargetModuleScanner.ScanModule("F3 0F 58 0D ?? ?? ?? ?? F3 48 0F 2C C1 69 C8");
+                var ptr1000f = DalamudApi.SigScanner.GetStaticAddressFromSig("4C 8D 25 ?? ?? ?? ?? 4C 63 F1");
+                var waitSyntax = DalamudApi.SigScanner.ScanModule("F3 0F 58 05 ?? ?? ?? ?? F3 48 0F 2C C0 69 C8");
+                var waitCommand = DalamudApi.SigScanner.ScanModule("F3 0F 58 0D ?? ?? ?? ?? F3 48 0F 2C C1 69 C8");
                 var newOffsetBytes1 = BitConverter.GetBytes((int)(ptr1000f.ToInt64() - (waitSyntax + 0x8).ToInt64()));
                 var newOffsetBytes2 = BitConverter.GetBytes((int)(ptr1000f.ToInt64() - (waitCommand + 0x8).ToInt64()));
 
@@ -47,15 +44,14 @@ namespace Fractionality
             catch { PrintError("Failed to load!"); }
         }
 
-        public static void PrintEcho(string message) => Interface.Framework.Gui.Chat.Print($"[Fractionality] {message}");
-        public static void PrintError(string message) => Interface.Framework.Gui.Chat.PrintError($"[Fractionality] {message}");
+        public static void PrintEcho(string message) => DalamudApi.ChatGui.Print($"[Fractionality] {message}");
+        public static void PrintError(string message) => DalamudApi.ChatGui.PrintError($"[Fractionality] {message}");
 
         #region IDisposable Support
         protected virtual void Dispose(bool disposing)
         {
             if (!disposing) return;
             Memory.Dispose();
-            Interface.Dispose();
         }
 
         public void Dispose()

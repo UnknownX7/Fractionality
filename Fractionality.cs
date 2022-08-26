@@ -47,7 +47,6 @@ namespace Fractionality
         public static void PrintEcho(string message) => DalamudApi.ChatGui.Print($"[Fractionality] {message}");
         public static void PrintError(string message) => DalamudApi.ChatGui.PrintError($"[Fractionality] {message}");
 
-        #region IDisposable Support
         protected virtual void Dispose(bool disposing)
         {
             if (!disposing) return;
@@ -59,6 +58,5 @@ namespace Fractionality
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
     }
 }

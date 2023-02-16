@@ -1,15 +1,14 @@
 ﻿{
   "Author": "UnknownX",
   "Name": "Fractionality",
-  "Punchline": "Changes /wait and <wait> to support fractions",
-  "Description": "Adds 3 decimal precision waiting to macros and removes the 60 seconds cap.",
+  "Punchline": "DEPRECATED",
+  "Description": "This plugin is available as an option in ReAction now.",
   "IconUrl": "",
   "ImageUrls": [
     ""
   ],
   "RepoUrl": "https://github.com/UnknownX7/Fractionality",
   "CategoryTags": [
-    "utility"
   ],
   "InternalName": "Fractionality",
   "AssemblyVersion": "9.9.9.9"

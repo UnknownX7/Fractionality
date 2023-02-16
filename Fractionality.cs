@@ -1,5 +1,6 @@
 using System;
 using Dalamud.Game;
+using Dalamud.Game.ClientState;
 using Dalamud.Game.Gui;
 using Dalamud.Plugin;
 
@@ -9,9 +10,9 @@ namespace Fractionality
     {
         public string Name => "Fractionality";
 
-        public Fractionality(ChatGui chatGui, SigScanner sigScanner)
+        public Fractionality(ChatGui chatGui, SigScanner sigScanner, ClientState clientState, Framework framework)
         {
-            _ = new DalamudApi() + sigScanner + chatGui;
+            _ = new DalamudApi() + sigScanner + chatGui + clientState + framework;
 
             try
             {
@@ -40,8 +41,20 @@ namespace Fractionality
                     0xEB // 0x1F
                 });
                 waitCommandFractionalReplacer.Enable();
+
+                DalamudApi.ClientState.Login += OnLogin;
+                if (DalamudApi.ClientState.IsLoggedIn)
+                    OnLogin(null, null);
             }
             catch { PrintError("Failed to load!"); }
+        }
+
+        private static void OnLogin(object sender, EventArgs e)
+        {
+            DalamudApi.Framework.RunOnTick(() =>
+            {
+                PrintError("Fractionality is now deprecated and will not be updated the next time it breaks, please swap to using ReAction's \"Enable Decimal Waits\" option in its \"Other Settings\" tab (available from the same plugin repository as this).");
+            }, new TimeSpan(0, 0, 0, 5));
         }
 
         public static void PrintEcho(string message) => DalamudApi.ChatGui.Print($"[Fractionality] {message}");
@@ -50,6 +63,7 @@ namespace Fractionality
         protected virtual void Dispose(bool disposing)
         {
             if (!disposing) return;
+            DalamudApi.ClientState.Login -= OnLogin;
             Memory.Dispose();
         }
 

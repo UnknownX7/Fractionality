@@ -1,2 +1,2 @@
 # DEPRECATED
-Please use ReAction's "Enable Decimal Waits" feature instead.
+Please use [ReAction](https://github.com/UnknownX7/ReAction)'s "Enable Decimal Waits" feature instead.
